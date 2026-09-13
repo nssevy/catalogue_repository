@@ -1,5 +1,5 @@
 #[allow(unused)]
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Article {
     id: u32,
     nom: String,
@@ -16,7 +16,7 @@ impl Article {
 #[allow(unused)]
 trait ArticleRepository {
     fn save(&mut self, article: Article) -> ();
-    fn find(&self, id: u32) -> Option<Article>;
+    fn find(&self, id: u32) -> Result<Article, String>;
     fn all(&self) -> &[Article];
 }
 
@@ -37,8 +37,12 @@ impl ArticleRepository for VecCatalog {
         self.articles.push(article);
     }
 
-    fn find(&self, id: u32) -> Option<Article> {
-        self.articles.iter().find(|article| article.id == id).cloned()
+    fn find(&self, id: u32) -> Result<Article, String> {
+
+        self.articles.iter()
+            .find(|article| article.id == id)
+            .cloned()
+            .ok_or_else(|| format!("Recherche id {}", id))
     }
 
     fn all(&self) -> &[Article] {
@@ -66,5 +70,16 @@ fn main() {
     stock_livre.save(baguarre_studio);
 
     println!("Valeur du stock (Vec) : {} centimes", valeur_du_stock(&stock_livre));
+
+    match stock_livre.find(02){
+        Ok(a) => println!("Recherche id {} : trouve -> {}", a.id, a.nom),
+        Err(e) => eprintln!("{} ,aucun article", e),
+    };
+
+    match stock_livre.find(99){
+        Ok(a) => println!("Recherche id {} : trouve -> {}", a.id, a.nom),
+        Err(e) => eprintln!("{} : aucun article", e),
+    };
+
 
 }
