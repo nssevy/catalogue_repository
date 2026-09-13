@@ -71,15 +71,13 @@ fn main() {
 
     println!("Valeur du stock (Vec) : {} centimes", valeur_du_stock(&stock_livre));
 
-    match stock_livre.find(02){
-        Ok(a) => println!("Recherche id {} : trouve -> {}", a.id, a.nom),
-        Err(e) => eprintln!("{} ,aucun article", e),
-    };
+    let requete_livre: [u32; 2] = [02, 99];
 
-    match stock_livre.find(99){
-        Ok(a) => println!("Recherche id {} : trouve -> {}", a.id, a.nom),
-        Err(e) => eprintln!("{} : aucun article", e),
-    };
-
+    for rl in requete_livre {
+        match stock_livre.find(rl){
+            Ok(a) => println!("Recherche id {} : trouve -> {}", a.id, a.nom),
+            Err(e) => eprintln!("{} ,aucun article", e),
+        };
+    }
 
 }
