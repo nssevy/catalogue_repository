@@ -1,4 +1,4 @@
-#[allow(unused)]
+//#[allow(unused)]
 #[derive(Clone, Debug)]
 struct Article {
     id: u32,
@@ -13,7 +13,7 @@ impl Article {
     }
 }
 
-#[allow(unused)]
+//#[allow(unused)]
 trait ArticleRepository {
     fn save(&mut self, article: Article) -> ();
     fn find(&self, id: u32) -> Result<Article, String>;
@@ -55,6 +55,10 @@ fn valeur_du_stock(repo: &impl ArticleRepository) -> u32 {
     repo.all().iter().filter(|a| a.stock).map(|a| a.prix).sum()
 }
 
+fn prix_en_euros(centimes: u32) -> f64 {
+    centimes as f64 / 100.0
+}
+
 fn main() {
 
     let le_monde = Article::new(01, "Le Monde".into(), 1999, true);
@@ -69,7 +73,7 @@ fn main() {
     stock_livre.save(camino);
     stock_livre.save(baguarre_studio);
 
-    println!("Valeur du stock (Vec) : {} centimes", valeur_du_stock(&stock_livre));
+    println!("Valeur du stock (Vec) : {} euros",  prix_en_euros(valeur_du_stock(&stock_livre)) );
 
     let requete_livre: [u32; 2] = [02, 99];
 
